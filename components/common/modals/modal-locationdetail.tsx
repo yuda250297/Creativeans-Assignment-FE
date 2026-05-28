@@ -44,12 +44,12 @@ const getStatusProgress = (status?: string) => {
 };
 
 const getColorProgress = (status?: string) => {
-  if (!status) return 0;
+  if (!status) return "bg-gray-200";
   const s = status.toLowerCase().replace(/\s+/g, '_');
   if (s === 'pending') return "bg-gray-300";
   if (s === 'on_delivery') return "bg-yellow-500";
   if (s === 'completed' || s === 'delivered') return "bg-green-500";
-  return 0;
+  return "bg-gray-200";
 };
 
 export function ModalLocationDetail({open, onOpenChange, feature}: {open: boolean, onOpenChange: (open: boolean) => void, feature?: any}) {
@@ -165,7 +165,7 @@ export function ModalLocationDetail({open, onOpenChange, feature}: {open: boolea
                       </div>
                       <div className="flex-1 justify-end flex">
                         <div className="font-semibold max-w-fit px-3 items-center gap-1 justify-center bg-blue-900 text-white uppercase text-[10px] rounded-sm py-0.5">
-                          {"ORDER " + order.status || "ORDER PAID"}
+                          {order.status ? `ORDER ${order.status}` : "ORDER PAID"}
                         </div>
                       </div>
                     </div>
