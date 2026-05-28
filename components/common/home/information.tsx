@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { useGetDeliveries } from "@/hooks/use-delivery";
+import { useGetStats } from "@/hooks/use-stats";
 import { useEffect } from "react";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { LiaLinkedin } from "react-icons/lia";
@@ -32,13 +33,15 @@ const getColorProgress = (status?: string) => {
 export default function Information() {
 
     const { deliveries, fetchDeliveries, isLoading: isDeliveriesLoading } = useGetDeliveries();
+    const { stats, fetchStats, isLoading: isStatsLoading } = useGetStats();
 
     useEffect(() => {
       // console.log("Modal open:", feature);
       setTimeout(() => {
          fetchDeliveries();
+         fetchStats();
       }, 2000);
-    }, [fetchDeliveries]);
+    }, [fetchDeliveries, fetchStats]);
 
     return (
         <div>
@@ -67,9 +70,9 @@ export default function Information() {
                     <div className="absolute bg-gray-100/25 rounded-md rotate-45 w-25 h-25 right-0 bottom-0 z-0"></div>
                     <CardContent className="pb-0 z-10">
                       <p className="text-xs">
-                        Active Routes
+                        Total Waypoints
                       </p>
-                      <p className="text-2xl font-bold">8</p>
+                      <p className="text-2xl font-bold">{stats?.data?.total_locations || 0}</p>
                     </CardContent>
                   </Card>
 
@@ -77,9 +80,9 @@ export default function Information() {
                     <div className="absolute bg-gray-100/25 rounded-md rotate-45 w-25 h-25 right-0 bottom-0 z-0"></div>
                     <CardContent className="m-0">
                       <p className="text-xs">
-                        Total km
+                        Total Orders
                       </p>
-                      <p className="text-2xl font-bold z-10">120</p>
+                      <p className="text-2xl font-bold z-10">{stats?.data?.total_orders || 0}</p>
                     </CardContent>
                   </Card>
               </div>

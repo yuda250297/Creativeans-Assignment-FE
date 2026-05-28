@@ -9,10 +9,11 @@ interface NavbarProps {
     onLoadDirections: () => Promise<void>;
     isDirectionsLoading: boolean;
     onFetchLocations: (params: any) => void;
+    onTogglePopups: () => void;
     isLocationsLoading: boolean;
 }
 
-export default function Navbar({ onLoadDirections, isDirectionsLoading, onFetchLocations, isLocationsLoading }: NavbarProps) {
+export default function Navbar({ onLoadDirections, isDirectionsLoading, onFetchLocations, onTogglePopups, isLocationsLoading }: NavbarProps) {
     
     const open = useModalStore((state) => state.open);
 
@@ -47,7 +48,9 @@ export default function Navbar({ onLoadDirections, isDirectionsLoading, onFetchL
                 variant={"outline"}
                 style={{
                 letterSpacing: "3%"
-            }}><BsPinMap/>Toggle popover detail</Button>
+            }}
+                onClick={onTogglePopups}
+            ><BsPinMap/>Toggle popover detail</Button>
             <Button
                 className="h-full border-0 shadow-none text-sm cursor-pointer font-semibold"
                 variant={"outline"}

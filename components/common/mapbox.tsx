@@ -82,6 +82,12 @@ export default function Map({routeData, origin, destination, onRouteLoaded} : Ma
             await fetchDirections(origin, destination);
         };
 
+        const handleToggleAllPopups = () => {
+            waypointMarkersRef.current.forEach(marker => {
+                marker.togglePopup();
+            });
+        };
+
         // Initialize map once
         useEffect(() => {
             if (map.current) 
@@ -324,6 +330,7 @@ export default function Map({routeData, origin, destination, onRouteLoaded} : Ma
                         onLoadDirections={handleLoadDirections} 
                         isDirectionsLoading={loading} 
                         onFetchLocations={fetchLocations}
+                        onTogglePopups={handleToggleAllPopups}
                         isLocationsLoading={isLocationsLoading}
                     />
 
