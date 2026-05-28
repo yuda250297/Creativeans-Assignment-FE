@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type ModalType = "locationDetail" | "deliveryList" | null;
+type ModalType = "locationDetail" | "deliveryList" | "about" | null;
 
 interface ModalState {
   openModal: ModalType;

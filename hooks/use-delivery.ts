@@ -12,7 +12,7 @@ export const useGetDeliveries = () => {
     // console.log("Fetching deliveries...");
     try {
       const data = await getDeliveries(params);
-      // console.log(data);
+      console.log(data);
       setDeliveries(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');

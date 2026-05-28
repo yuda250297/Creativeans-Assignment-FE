@@ -12,7 +12,7 @@ export const useGetLocations = () => {
     // console.log("Fetching locations...");
     try {
       const data = await getLocations(params);
-      // console.log(data);
+      console.log(data);
       setLocations(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');

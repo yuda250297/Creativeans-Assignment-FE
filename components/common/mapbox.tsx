@@ -9,8 +9,8 @@ import {FaMapMarkerAlt} from "react-icons/fa";
 import {BsPinMap} from "react-icons/bs";
 import {GrInfo} from "react-icons/gr";
 import {createRoot} from "react-dom/client";
-import {PopupContent} from "./orderlist";
-import Navbar from "./map/nav";
+import {PopupContent} from "./map/waypoint-popup";
+import Navbar from "./map/navbar";
 import {useGetLocations} from "@/hooks/use-location";
 import { useGetDeliveries } from "@/hooks/use-delivery";
 
@@ -211,6 +211,7 @@ export default function Map({routeData, origin, destination, onRouteLoaded} : Ma
             const root = createRoot(popupNode);
             root.render(
               <PopupContent 
+                store_id={feature.properties.location_id}
                 feature={feature}
                 title={feature.properties.name} 
                 type={feature.properties.location_type} 
@@ -237,72 +238,72 @@ export default function Map({routeData, origin, destination, onRouteLoaded} : Ma
 
 
         // Add markers for origin and destination
-        useEffect(() => {
-            if (!map.current || !origin || !destination) 
-                return;
+        // useEffect(() => {
+        //     if (!map.current || !origin || !destination) 
+        //         return;
             
-            const addMarkers = () => {
+        //     const addMarkers = () => {
 
-                // Add origin marker
-                const originEl = document.createElement("img");
-                originEl.src = "/map-marker.svg";
-                originEl.style.width = "40px";
-                originEl.style.height = "40px";
-                // originEl.style.filter = "hue-rotate(120deg)";
-                originEl.className = "direction-marker";
+        //         // Add origin marker
+        //         const originEl = document.createElement("img");
+        //         originEl.src = "/map-marker.svg";
+        //         originEl.style.width = "40px";
+        //         originEl.style.height = "40px";
+        //         // originEl.style.filter = "hue-rotate(120deg)";
+        //         originEl.className = "direction-marker";
 
-                const addOriginMarker = () => {
-                    new mapboxgl
-                        .Marker(originEl)
-                        .setLngLat([origin.lng, origin.lat])
-                        .addTo(map.current !);
-                };
+        //         const addOriginMarker = () => {
+        //             new mapboxgl
+        //                 .Marker(originEl)
+        //                 .setLngLat([origin.lng, origin.lat])
+        //                 .addTo(map.current !);
+        //         };
 
-                if (originEl.complete) {
-                    addOriginMarker();
-                } else {
-                    originEl.onload = addOriginMarker;
-                }
+        //         if (originEl.complete) {
+        //             addOriginMarker();
+        //         } else {
+        //             originEl.onload = addOriginMarker;
+        //         }
 
-                // Add destination marker
-                const destEl = document.createElement("img");
-                destEl.src = "/map-marker.svg";
-                destEl.style.width = "40px";
-                destEl.style.height = "40px";
-                destEl.className = "direction-marker";
+        //         // Add destination marker
+        //         const destEl = document.createElement("img");
+        //         destEl.src = "/map-marker.svg";
+        //         destEl.style.width = "40px";
+        //         destEl.style.height = "40px";
+        //         destEl.className = "direction-marker";
 
-                const addDestMarker = () => {
-                    new mapboxgl
-                        .Marker(destEl)
-                        .setLngLat([destination.lng, destination.lat])
-                        .addTo(map.current !);
-                };
+        //         const addDestMarker = () => {
+        //             new mapboxgl
+        //                 .Marker(destEl)
+        //                 .setLngLat([destination.lng, destination.lat])
+        //                 .addTo(map.current !);
+        //         };
 
-                if (destEl.complete) {
-                    addDestMarker();
-                } else {
-                    destEl.onload = addDestMarker;
-                }
+        //         if (destEl.complete) {
+        //             addDestMarker();
+        //         } else {
+        //             destEl.onload = addDestMarker;
+        //         }
 
-                // Fit map bounds to include both markers
-                const bounds = new mapboxgl.LngLatBounds([
-                    origin.lng, origin.lat
-                ], [destination.lng, destination.lat]);
-                map.current !.fitBounds(bounds, {
-                    padding: 100,
-                    maxZoom: 15,
-                    pitch: 45
-                });
-            };
+        //         // Fit map bounds to include both markers
+        //         const bounds = new mapboxgl.LngLatBounds([
+        //             origin.lng, origin.lat
+        //         ], [destination.lng, destination.lat]);
+        //         map.current !.fitBounds(bounds, {
+        //             padding: 100,
+        //             maxZoom: 15,
+        //             pitch: 45
+        //         });
+        //     };
 
-            if (map.current.loaded()) {
-                addMarkers();
-            } else {
-                map
-                    .current
-                    .once("load", addMarkers);
-            }
-        }, [origin, destination]);
+        //     if (map.current.loaded()) {
+        //         addMarkers();
+        //     } else {
+        //         map
+        //             .current
+        //             .once("load", addMarkers);
+        //     }
+        // }, [origin, destination]);
 
         return (
             <div

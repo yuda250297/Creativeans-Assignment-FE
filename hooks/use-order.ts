@@ -12,7 +12,7 @@ export const useGetOrders = () => {
     // console.log("Fetching orders...");
     try {
       const data = await getOrders(params);
-      // console.log(data);
+      console.log(data);
       setOrders(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');

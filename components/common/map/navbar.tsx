@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useModalStore } from "@/store/modalstore";
 import { BsPinMap } from "react-icons/bs";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { GrInfo } from "react-icons/gr";
@@ -13,6 +14,8 @@ interface NavbarProps {
 
 export default function Navbar({ onLoadDirections, isDirectionsLoading, onFetchLocations, isLocationsLoading }: NavbarProps) {
     
+    const open = useModalStore((state) => state.open);
+
     return (
         <nav
             className="absolute top-1 my-2 mx-3 z-10 rounded-lg bg-white shadow-md h-16 w-[calc(100%-4rem)] flex items-center gap-2 px-2">
@@ -32,7 +35,8 @@ export default function Navbar({ onLoadDirections, isDirectionsLoading, onFetchL
                 style={{
                 letterSpacing: "3%"
             }}
-                onClick={onLoadDirections}
+                // onClick={onLoadDirections}
+                onClick={() => open("deliveryList")}
                 disabled={isDirectionsLoading}>
                 <TbTruckDelivery />{isDirectionsLoading
                     ? "Loading..."
@@ -47,6 +51,7 @@ export default function Navbar({ onLoadDirections, isDirectionsLoading, onFetchL
             <Button
                 className="h-full border-0 shadow-none text-sm cursor-pointer font-semibold"
                 variant={"outline"}
+                onClick={() => open("about")}
                 style={{
                 letterSpacing: "3%"
             }}><GrInfo/>About this project</Button>

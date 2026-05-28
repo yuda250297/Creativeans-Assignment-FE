@@ -3,8 +3,8 @@
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "../ui/badge";
-import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Badge } from "../../ui/badge";
+import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { useModalStore } from "@/store/modalstore";
 
 type Transaction = {
@@ -24,13 +24,14 @@ const transactions: Transaction[] = [
 ];
 
 interface PopupContentProps {
+  store_id: string;
   title: string;
   type?: string;
   picture?: string;
   feature?: any;
 }
 
-export function PopupContent({ title, type, picture, feature }: PopupContentProps) {
+export function PopupContent({ store_id, title, type, picture, feature }: PopupContentProps) {
 
   const open = useModalStore((state) => state.open);
   // const close = useModalStore((state) => state.close);
@@ -43,7 +44,7 @@ export function PopupContent({ title, type, picture, feature }: PopupContentProp
         <div className="shrink-0">
           <Avatar className="rounded-sm size-12">
             <AvatarImage src={picture} alt={title} />
-            <AvatarFallback>ER</AvatarFallback>
+            <AvatarFallback>OEP</AvatarFallback>
           </Avatar>
         </div>
 
@@ -51,18 +52,18 @@ export function PopupContent({ title, type, picture, feature }: PopupContentProp
         <div className="flex flex-col justify-center gap-1 overflow-hidden min-w-0">
           {/* Badge stays at the top, items-start ensures it doesn't stretch */}
           <div className="flex items-start">
-            <Badge variant="secondary" className="rounded-xs shrink-0 border border-gray-200">
+            <Badge variant="secondary" className="rounded-xs shrink-0 bg-yellow-500 text-white text-xs font-medium">
               {type}
             </Badge>
           </div>
           {/* Title sits below the badge */}
-          <p className="font-medium truncate text-sm">{title}</p>
+          <p className="font-semibold truncate text-xs text-slate-600">{title}</p>
         </div>
       </div>
 
       {/* Footer Button */}
       <div className="p-2 bg-gray-50 border-t">
-        <Button size="sm" className="w-full rounded-sm text-xs cursor-pointer" onClick={() => open("locationDetail", feature)}>
+        <Button size="sm" className="w-full rounded-sm text-xs cursor-pointer bg-slate-800 text-white" onClick={() => open("locationDetail", feature)}>
           View details
         </Button>
       </div>
