@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select";
 import { authCookies } from "@/lib/cookies";
 import { getAuthHeaders } from "@/lib/auth";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProductList() {
     const [products, setProducts] = useState<any[]>([]);
@@ -117,7 +118,26 @@ export default function ProductList() {
 
             <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-3 items-center my-4">
             {isLoading ? (
-                <p>Loading products...</p>
+                Array.from({ length: 8 }).map((_, i) => (
+                    <div key={i} className="border border-outline-variant rounded-md overflow-hidden bg-white">
+                        <Skeleton className="aspect-square w-full rounded-none" />
+                        <div className="p-4 space-y-3">
+                            <div className="flex justify-between items-center">
+                                <Skeleton className="h-3 w-20" />
+                                <Skeleton className="h-3 w-10" />
+                            </div>
+                            <Skeleton className="h-4 w-3/4" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-3 w-full" />
+                                <Skeleton className="h-3 w-2/3" />
+                            </div>
+                            <div className="flex justify-between items-center pt-2">
+                                <Skeleton className="h-5 w-16" />
+                                <Skeleton className="h-8 w-14 rounded-sm" />
+                            </div>
+                        </div>
+                    </div>
+                ))
             ) : products.length > 0 ? (
                 products.map((product: any) => (
                     <div key={product.id}

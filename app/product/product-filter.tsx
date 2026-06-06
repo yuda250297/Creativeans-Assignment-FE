@@ -26,7 +26,7 @@ const filterSchema = z.object({
   inStock: z.boolean(),
   sort: z.string(),
   method: z.string(),
-  pageSize: z.coerce.number(),
+  pageSize: z.number(),
 });
 
 type FilterFormData = z.infer<typeof filterSchema>;
@@ -38,22 +38,23 @@ export default function ProductFilter() {
     const [categories, setCategories] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const form = useForm({
+    const form = useForm<FilterFormData>({
         resolver: zodResolver(filterSchema),
         defaultValues: {
-            q: "",
-            minPrice: "",
-            maxPrice: "",
-            category: [],
-            inStock: true,
-            sort: "relevance",
-            method: "desc",
-            pageSize: 20,
+            q: searchParams.get("q") || "",
+            minPrice: searchParams.get("minPrice") || "",
+            maxPrice: searchParams.get("maxPrice") || "",
+            category: searchParams.get("category")?.split(",").filter(Boolean) || [],
+            inStock: searchParams.get("inStock") === "false" ? false : true,
+            sort: searchParams.get("sort") || "relevance",
+            method: searchParams.get("method") || "desc",
+            pageSize: Number(searchParams.get("pageSize")) || 20,
         },
     });
 
     // Watch all form fields
     const watchedValues = form.watch();
+    const { isDirty } = form.formState;
 
     // Fetch product categories
     useEffect(() => {
@@ -100,9 +101,7 @@ export default function ProductFilter() {
         // Only reset if values actually differ to prevent unchecking flicker/loops
         const currentValues = form.getValues();
         if (JSON.stringify(currentValues) !== JSON.stringify(newValues)) {
-            form.reset(newValues, {
-                keepDefaultValues: true 
-            });
+            form.reset(newValues, { keepDefaultValues: false });
         }
     }, [searchParams, form]);
 
@@ -131,7 +130,9 @@ export default function ProductFilter() {
                 (methodInUrl !== null ? methodInUrl !== watchedValues.method : watchedValues.method !== "desc") ||
                 (pageSizeInUrl !== null ? pageSizeInUrl !== String(watchedValues.pageSize) : watchedValues.pageSize !== 20);
 
-            if (isFilterModified) {
+            // Only sync to URL if the user has manually touched the form (isDirty)
+            // This prevents the form from overwriting the URL during navigation/mount
+            if (isFilterModified && isDirty) {
                 // Reset to page 1 whenever a filter is changed
                 params.delete("page");
 
@@ -158,19 +159,7 @@ export default function ProductFilter() {
         }, 500); // 500ms debounce
 
         return () => clearTimeout(timer);
-    }, [
-        watchedValues.q,
-        watchedValues.minPrice,
-        watchedValues.maxPrice,
-        watchedValues.category,
-        watchedValues.inStock,
-        watchedValues.sort,
-        watchedValues.method,
-        watchedValues.pageSize,
-        pathname,
-        router,
-        searchParams
-    ]);
+    }, [watchedValues, pathname, router, searchParams, form.formState.isDirty]);
 
     return (
         <div className="w-full p-4 bg-white rounded-md border">
@@ -234,11 +223,7 @@ export default function ProductFilter() {
                                 />
                             </div>
 
-                            <FormField
-                                control={form.control}
-                                name="category"
-                                render={() => (
-                                    <FormItem>
+                                    <div className="space-y-2">
                                         <div className="mb-2">
                                             <FormLabel className="text-xs">Categories</FormLabel>
                                         </div>
@@ -284,10 +269,7 @@ export default function ProductFilter() {
                                                 ))
                                             )}
                                         </div>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                                    </div>
 
                             <FormField
                                 control={form.control}
@@ -313,7 +295,7 @@ export default function ProductFilter() {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="text-xs">Sort By</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <Select onValueChange={field.onChange} value={field.value}>
                                             <FormControl>
                                                 <SelectTrigger className="h-10 rounded-none w-full">
                                                     <SelectValue placeholder="Sort by" />
@@ -337,7 +319,7 @@ export default function ProductFilter() {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="text-xs">Sort Method</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <Select onValueChange={field.onChange} value={field.value}>
                                             <FormControl>
                                                 <SelectTrigger className="h-10 rounded-none w-full">
                                                     <SelectValue placeholder="Sort method" />
