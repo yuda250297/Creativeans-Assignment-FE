@@ -120,6 +120,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    scroll-behavior: smooth;
   }
 }
 
@@ -132,5 +133,27 @@
   background: transparent !important; /* clears inner white box */
   border: none !important;            /* removes border */
   padding: 0 !important;              /* optional: remove padding */
+}
+
+/* Enhanced form input styling */
+@layer components {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  textarea,
+  select {
+    @apply transition-all duration-200;
+  }
+
+  /* Smooth transitions for all interactive elements */
+  button,
+  a {
+    @apply transition-all duration-200 ease-out;
+  }
+
+  /* Focus ring enhancement */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-1;
+  }
 }
 
